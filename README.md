@@ -12,8 +12,8 @@ This project applies the **Apriori algorithm** to a supermarket transaction data
 
 ## 🛠️ Requirements
 The analysis was written in **R** and requires the following packages:
-
+https://spoja-10.github.io/Apriori-Algorithm/apriori_algorithm.html
 ```r
 install.packages(c("here", "arules"))
 
-https://spoja-10.github.io/Apriori-Algorithm/apriori_algorithm.html
+
