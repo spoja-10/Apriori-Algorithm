@@ -1,0 +1,126 @@
+---
+title: "apriori_algorithm"
+output: html_document
+---
+
+# Import Libraries
+```{r}
+library(here)
+library (arules)
+getwd()
+```
+# Import The Dataset
+
+```{r Import Data}
+dataset <- read.csv("C:/Users/morul/School/3rd Year/BIN381/Apriori-Algorithm/dataset/Market_Basket_Optimisation.csv",
+                    header = FALSE)
+
+
+```
+
+# Converting the dataset into a Sparse Matrix
+```{r}
+dataset  = read.transactions("C:/Users/morul/School/3rd Year/BIN381/Apriori Algo/dataset/Market_Basket_Optimisation.csv",sep =",",rm.duplicates = TRUE)
+
+summary(dataset)
+itemFrequencyPlot(dataset,topN = 50)
+
+```
+
+# Training Apriori dataset
+```{r}
+rules = apriori(data = dataset, parameter = list(support = 0.003, confidence = 0.4)) 
+
+```
+# Visualizing the results
+```{r}
+inspect(sort (rules, by ="lift")[1:10])
+```
+
+
+### How to Read the Table (quick recap)
+
+* **lhs (left-hand side):** items people already bought.
+* **rhs (right-hand side):** the item(s) they’re *likely* to also buy.
+* **support:** fraction of all baskets with this combo (tiny numbers are normal).
+* **confidence:** probability that rhs is bought when lhs is bought.
+* **lift:** how much more likely rhs is with lhs compared to random chance. Higher than 1 = positive association, above \~3 = pretty strong.
+* **count:** how many transactions contained lhs + rhs.
+
+---
+
+### Key Findings
+
+1. **Healthy Shopper Combo**
+   `{mineral water, whole wheat pasta} => {olive oil}`
+
+   * Lift: 6.12 (very strong).
+   * Translation: health-conscious shoppers think olive oil is mandatory with pasta + water.
+   * Recommendation: Bundle pasta, olive oil, and mineral water as a “Healthy Meal Deal.” Position them together on shelves.
+
+2. **Classic Italian Link**
+   `{spaghetti, tomato sauce} => {ground beef}`
+
+   * Confidence: \~49%.
+   * Translation: nearly half the people who buy spaghetti + tomato sauce also grab ground beef.
+   * Recommendation: Promote a “Spaghetti Bolognese Kit.” Place ground beef near pasta aisles or run cross-promotions.
+
+3. **Snack & Spice Lovers**
+   `{french fries, herb & pepper} => {ground beef}`
+
+   * Lift: 4.70.
+   * Suggests shoppers seasoning fries also cook beef.
+   * Recommendation: Advertise seasoning mixes alongside beef.
+
+4. **Sweet-to-Savory Crossover**
+   `{cereals, spaghetti} => {ground beef}`
+
+   * Odd combo, but still 46% confidence.
+   * Might indicate large household / family shopping.
+   * Recommendation: Consider family meal promotions mixing breakfast + dinner staples.
+
+5. **Frozen + Fresh Dairy Connection**
+   `{frozen vegetables, mineral water, soup} => {milk}`
+
+   * Confidence: 60% (highest in the table).
+   * Translation: when people shop “balanced meals,” milk gets thrown in.
+   * Recommendation: Put milk coupons with frozen soups/veg.
+
+6. **Chocolate & Protein**
+   `{chocolate, herb & pepper} => {ground beef}`
+
+   * Lift: 4.49.
+   * Translation: indulgence + dinner shopping happen together.
+   * Recommendation: Cross-sell beef + chocolate in weekly family meal promos.
+
+7. **Seafood + Greens**
+   `{chocolate, mineral water, shrimp} => {frozen vegetables}`
+
+   * Lift: 4.42.
+   * Suggests a “balanced indulgence” mindset.
+   * Recommendation: Push shrimp + frozen veg bundles.
+
+8. **Milk as a Frequent Tagalong**
+   `{frozen vegetables, soup} => {milk}` and `{frozen vegetables, mineral water, olive oil} => {milk}`
+
+   * Consistent link: milk keeps appearing as an add-on.
+   * Recommendation: Place milk promotions near freezer aisles.
+
+9. **Cereal Buyers Upgrade to Pasta**
+   `{cereals, ground beef} => {spaghetti}`
+
+   * Confidence: 67% (second highest).
+   * Translation: cereal + beef buyers almost always also take spaghetti.
+   * Recommendation: Push cereal + spaghetti multi-buy offers, targeting families.
+
+---
+
+### Recommendations
+
+* **Promote meal kits:** Bundles like “Spaghetti Bolognese Night” (spaghetti, tomato sauce, ground beef) or “Healthy Pasta Pack” (whole wheat pasta, olive oil, mineral water).
+* **Shelf placement:** Move olive oil closer to pasta and water, and ground beef closer to spaghetti/tomato sauce.
+* **Targeted promotions:** Offer discounts or coupons for milk with frozen/soup items.
+* **Marketing angle:** These rules highlight *meal-based shopping patterns*. Customers buy in clusters that map to complete meals, not random items.
+
+---
+
